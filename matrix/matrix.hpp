@@ -54,6 +54,11 @@ namespace Math
 	}
 
 	template<typename T, int n, int m>
+	Matrix<T, n, m>::Matrix(const Matrix<T, n, m> &mat) {
+		std::copy(mat.matrix.begin(), mat.matrix.end(), matrix.begin());
+	}
+
+	template<typename T, int n, int m>
 	Matrix<T, n, m>::Matrix(Matrix<T, n, m> &&mat) 
 	{
 		swap(*this, mat);
@@ -99,6 +104,17 @@ namespace Math
 	}
 	
 	template<typename T, int n, int m>
+	Matrix<T, n, m> operator-(const Matrix<T, n, m> &rhs) {
+		Matrix<T, n, m> result;
+		for(int i = 0; i < n; ++i) {
+			for(int j = 0; j < m; ++j) {
+				result(i, j) = -rhs(i, j);
+			}
+		}
+		return result;
+	}
+
+	template<typename T, int n, int m>
 	bool Matrix<T,n,m>::operator==(const Matrix<T, n, m> &rhs) {
 		bool result = true;
 		for(int i = 0; i < n*m; ++i) {
@@ -126,6 +142,18 @@ namespace Math
 	Matrix<T, n, m> operator*(T scalar, const Matrix<T, n, m> &rhs) {
 		return rhs * scalar;
 	}
+
+	template<typename T, int n, int r, int s>
+	Matrix<T, n, r+s> concatenateH(const Matrix<T, n, r> &mat1, const Matrix<T, n, s> &mat2) {
+		Matrix<T, n, r+s> cat;
+		for(int i = 0; i < n; ++i) {
+			for(int j = 0; j < r + s; ++j) {
+				cat(i, j) = (j < r) ? mat1(i, j) : mat2(i, j-r);
+			}
+		}
+		return cat;
+	}
+				
 
 	template<typename T, int n, int m, int r>
 	Matrix<T, n, m> dot(const Matrix<T, n, r> &lhs, const Matrix<T, r, m> &rhs) {

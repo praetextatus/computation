@@ -4,6 +4,8 @@
 #define LINEAR_SYSTEM_HPP
 
 #include <iostream>
+#include <vector>
+#include <cmath>
 #include "../matrix/matrix.hpp"
 
 /**
@@ -40,7 +42,7 @@ void gauss(Math::Matrix<T, n, n+1> &mat,
 	for(int i = n - 1; i >= 0; --i) {
 		/** TODO: make Vector with operator[] */
 		T sum = 0;
-		for(int j = i; j < n; ++j) {
+		for(int j = i + 1; j < n; ++j) {
 			sum += mat(i, j) * x(j, 0);
 		}
 		x(i, 0) = mat(i, n) - sum;
@@ -71,6 +73,29 @@ void luDecomposition(const Math::Matrix<T, n, n> &mat,
 		}
 	}
 }
-		  
-		
+
+/** Inverted matrix
+ *
+ */
+template<typename T, int n>
+void invert(Math::Matrix<T, n, n> &mat,
+			Math::Matrix<T, n, n> &inv) {
+	std::vector<Math::Matrix<T, n, 1> > columns;
+	Math::Matrix<T, n, 1> col;
+
+	for(int i = 0; i < n; ++i) {
+		Math::Matrix<T, n, 1> identityCol;
+		identityCol(i, 0) = 1;
+		Math::Matrix<T, n, n+1> extended(Math::concatenateH(mat, identityCol));
+		gauss(extended, col);
+		columns.push_back(col);
+	}
+
+	for(int i = 0; i < n; ++i) {
+		for(int j = 0; j < n; ++j) {
+			inv(i, j) = columns[j](i, 0);
+		}
+	}		
+}
+
 #endif // LINEAR_SYSTEM_HPP

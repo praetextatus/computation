@@ -47,6 +47,21 @@ BOOST_AUTO_TEST_CASE( test_LU ) {
 	BOOST_CHECK(L == L_exp);
 	BOOST_CHECK(U == U_exp);
 }
+
+BOOST_AUTO_TEST_CASE( test_invert ) {
+	Math::Matrix<double, 3, 3> 
+		mat {2, -14, 8,
+			3, -22, 7,
+			0, 2, 5};
+	Math::Matrix<double, 3, 3> inv;
+	Math::Matrix<double, 3, 3> 
+		inv_exp{-12.4, 8.6, 7.8,
+			-1.5, 1, 1,
+			0.6, -0.4, -0.2};
+			
+	invert(mat, inv);
+	BOOST_CHECK(inv == inv_exp);
+}
 	
 
 BOOST_AUTO_TEST_SUITE_END();

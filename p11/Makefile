@@ -1,7 +1,7 @@
 CC = g++
 SOURCES = $(wildcard *.cpp)
 OBJS = $(SOURCES:.cpp=.o)
-TARGET = tests
+TARGET = linear_system
 CFLAGS = -g -Wall -Wno-unknown-pragmas -std=c++0x
 LFLAGS = -lboost_unit_test_framework #-lboost_unit_test_framework-mt
 
