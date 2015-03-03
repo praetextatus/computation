@@ -1,8 +1,6 @@
 #include "system2.hpp"
 
-double det2(const Matrix2d &mat) {
-	return mat(0,0) * mat(1,1) - mat(0,1) * mat(0,1);
-}
+
 
 Matrix2d inverse2(const Matrix2d &mat) {
 	double det = det2(mat);
