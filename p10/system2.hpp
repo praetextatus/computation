@@ -3,6 +3,7 @@
 #ifndef SYSTEM2_HPP
 #define SYSTEM2_HPP
 
+#include <cmath>
 #include <stdexcept>
 #include "../matrix/matrix.hpp"
 
@@ -25,5 +26,18 @@ Matrix2d inverse2(const Matrix2d &mat);
  * Solve 2x2 system of linear equations
  */
 Vector2d solve2(const Matrix2d &coeffs, const Vector2d &b);
+
+/**
+ * Norm of a matrix
+ */
+double norm2(const Matrix2d &mat);
+
+
+/**
+ * Conditional number
+ */
+double cond(const Matrix2d &mat);
+	
+	
 	
 #endif // SYSTEM2_HPP	

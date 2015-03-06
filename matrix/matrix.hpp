@@ -7,6 +7,7 @@
 #include <array>
 #include <assert.h>
 #include <iomanip>
+#include <iostream>
 
 namespace Math 
 {
