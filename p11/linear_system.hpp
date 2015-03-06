@@ -18,16 +18,40 @@ const double eps = 1e-5;
  * Does not save the matrix but modifies it in place
  * @param[in,out] mat The extended matrix of the system
  * @param[out] x Output vector containing a solution
+ * @param changeVar if true, algorithm will change variables (that is, change columns of the matrix)
+ *                  when the leading element is too small
  */
 template<typename T, int n>
 void gauss(Math::Matrix<T, n, n+1> &mat,
-	   Math::Matrix<T, n, 1> &x) {
+		   Math::Matrix<T, n, 1> &x, bool changeVar = false) {
+	std::vector<int> newOrder;
+	for(int i = 0; i < n; ++i) {
+		newOrder.push_back(i);
+	}
+	
 	/* Direct traverse */
 	for(int k = 0; k < n; ++k) {
 		T temp = mat(k, k);
 		for(int j = k; j < n + 1; ++j) {
 			if(std::abs(temp) < eps) {
-				std::cout << "SMALL" << std::endl;
+				std::cout << "SMALL " << temp << std::endl;
+				if(changeVar) {
+					std::cout << "Changing variables\n";
+					for(int i = k + 1; i < n; ++i) {
+						std::cout << mat(k, i) << " " << temp << "\n";
+						if(std::abs(mat(k, i)) > std::abs(temp)) {
+							std::cout << "Changed " << i << " " << k << "\n";
+							for(int z = 0; z < n; ++z) {
+								std::swap(mat(z,k), mat(z, i));
+							}
+						}
+						temp = mat(k, k);
+						newOrder[k] = i;
+						newOrder[i] = k;
+						std::cout << "NEW\n" << mat;
+						break;
+					}
+				}
 			}
 			mat(k, j) /= temp;
 		}
@@ -38,6 +62,7 @@ void gauss(Math::Matrix<T, n, n+1> &mat,
 			}
 		}
 	}
+	
 	/* Back traverse */
 	for(int i = n - 1; i >= 0; --i) {
 		/** TODO: make Vector with operator[] */
@@ -45,7 +70,7 @@ void gauss(Math::Matrix<T, n, n+1> &mat,
 		for(int j = i + 1; j < n; ++j) {
 			sum += mat(i, j) * x(j, 0);
 		}
-		x(i, 0) = mat(i, n) - sum;
+		x(newOrder[i], 0) = mat(i, n) - sum; /* In case variables don't change, newOrder[i] == i. */
 	}
 }
 
@@ -87,7 +112,7 @@ void invert(Math::Matrix<T, n, n> &mat,
 		Math::Matrix<T, n, 1> identityCol;
 		identityCol(i, 0) = 1;
 		Math::Matrix<T, n, n+1> extended(Math::concatenateH(mat, identityCol));
-		gauss(extended, col);
+		gauss(extended, col);  //LU 
 		columns.push_back(col);
 	}
 
