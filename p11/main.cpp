@@ -23,5 +23,19 @@ int main() {
 	std::cout << "x = \n" << x;
 	Vector3d R = vec + (-Math::dot(mat, x));
 	std::cout << "R =\n" << R;
+
+	std::cout << "\n\nLU-Decomposition\n";
+	Math::Matrix<double, 3, 3> L, U;
+	luDecomposition(mat, L, U);
+	std::cout << "L=\n" << L << "U\n" << U;
+
+	mat(0,0) = mat(0,0) * 1e-8;
+	std::cout << "\n\n\nSolving system Cx=b\n where C=\n" << mat;
+	ext = Math::concatenateH(mat, vec);
+	gauss(ext, x, true);
+	std::cout << "x = \n" << x;
+	R = vec + (-Math::dot(mat, x));
+	std::cout << "R =\n" << R;
+
 }
 	

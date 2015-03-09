@@ -18,3 +18,18 @@ Vector2d solve2(const Matrix2d &coeffs, const Vector2d &b){
 	Vector2d solution = Math::dot(inv, b);
 	return solution;
 }
+
+double norm2(const Matrix2d &mat) {
+	double sum = 0;
+	for(int i = 0; i < 2; ++i) {
+		for(int j = 0; j < 2; ++j) {
+			sum += std::abs(mat(i,j));
+		}
+	}
+	return sum;
+}
+
+double cond(const Matrix2d &mat) {
+	Matrix2d inv = inverse2(mat);
+	return norm2(mat) * norm2(inv);
+}
