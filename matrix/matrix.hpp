@@ -12,9 +12,9 @@ namespace Math
 {
 	/**
 	 * A matrix class
-	 * @param T type of matrix elements
-	 * @param n number of rows
-	 * @param m number of columns
+	 * @tparam T type of matrix elements
+	 * @tparam n number of rows
+	 * @tparam m number of columns
 	 */
 	template<typename T, int n, int m>
 	class Matrix 
@@ -132,6 +132,10 @@ namespace Math
 		return lhs;
 	}
 
+	/**
+	 * A scalar multiplication.
+	 * @see dot()
+	 */
 	template<typename T, int n, int m>
 	Matrix<T, n, m> operator*(Matrix<T, n, m> lhs, T scalar) {
 		lhs *= scalar;
@@ -143,6 +147,10 @@ namespace Math
 		return rhs * scalar;
 	}
 
+	/**
+	 * Concatenate two matrices horizontally.
+	 * That is, given a matrix (A) and a matrix (B) a matrix (A B) will be returned.
+	 */
 	template<typename T, int n, int r, int s>
 	Matrix<T, n, r+s> concatenateH(const Matrix<T, n, r> &mat1, const Matrix<T, n, s> &mat2) {
 		Matrix<T, n, r+s> cat;
@@ -154,7 +162,10 @@ namespace Math
 		return cat;
 	}
 				
-
+	/**
+	 * Dot product.
+	 * This is a naive algorithm. It will be replaced by some other algorithm in the future 
+	 */
 	template<typename T, int n, int m, int r>
 	Matrix<T, n, m> dot(const Matrix<T, n, r> &lhs, const Matrix<T, r, m> &rhs) {
 		Matrix<T, n, m> product;
@@ -168,6 +179,10 @@ namespace Math
 		return product;
 	}
 
+	/**
+	 * Output operator.
+	 * Prints matrix in a pretty way. New line is inserted after.
+	 */
 	template<typename T, int n, int m>
 	std::ostream& operator<<(std::ostream &os, const Matrix<T, n, m> &mat) {
 		for(int i = 0; i < n; ++i) {
