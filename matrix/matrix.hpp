@@ -150,7 +150,9 @@ namespace Math
 
 	/**
 	 * Concatenate two matrices horizontally.
-	 * That is, given a matrix (A) and a matrix (B) a matrix (A B) will be returned.
+	 * @param mat1 Left-hand nxr matrix.
+	 * @param mat2 Right-hand nxs matrix.
+	 * @returns A nx(r+s) matrix of which first r columns are from mat1 and last s columns are from mat2.
 	 */
 	template<typename T, int n, int r, int s>
 	Matrix<T, n, r+s> concatenateH(const Matrix<T, n, r> &mat1, const Matrix<T, n, s> &mat2) {
@@ -165,7 +167,7 @@ namespace Math
 				
 	/**
 	 * Dot product.
-	 * This is a naive algorithm. It will be replaced by some other algorithm in the future 
+	 * This is a naive algorithm. It will be replaced by some other algorithm in the future.
 	 */
 	template<typename T, int n, int m, int r>
 	Matrix<T, n, m> dot(const Matrix<T, n, r> &lhs, const Matrix<T, r, m> &rhs) {
@@ -189,8 +191,8 @@ namespace Math
 		for(int i = 0; i < n; ++i) {
 			os << "| ";
 			for(int j = 0; j < m; ++j) {
-				os << std::setprecision(5) 
-				   << std::setw(7)
+				os << std::setprecision(10) 
+				   << std::setw(7)  
 				   << mat(i, j) << " ";
 			}
 			os << "|\n";

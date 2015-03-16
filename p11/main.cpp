@@ -15,7 +15,7 @@ int main() {
 	invert(mat, inv);
 	std::cout << "A^(-1)\n" << inv;
 	
-	Vector3d vec{2, 0, 5};
+    Vector3d vec{2, 0, 5};
 	Vector3d x;
 	std::cout << "\nSolving system Ax=b where b =\n" << vec;
 	Math::Matrix<double, 3, 4> ext = Math::concatenateH(mat, vec);

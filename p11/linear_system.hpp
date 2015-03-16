@@ -6,6 +6,8 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <boost/format.hpp>
+
 #include "../matrix/matrix.hpp"
 
 /**
@@ -18,43 +20,46 @@ const double eps = 1e-5;
  * Does not save the matrix but modifies it in place
  * @param[in,out] mat The extended matrix of the system
  * @param[out] x Output vector containing a solution
- * @param changeVar if true, algorithm will change variables (that is, change columns of the matrix)
- *                  when the leading element is too small
+ * @param swapVar if true, algorithm will swap variables (that is, swap columns of the matrix)
+ *                when the leading element is too small
  */
 template<typename T, int n>
 void gauss(Math::Matrix<T, n, n+1> &mat,
-		   Math::Matrix<T, n, 1> &x, bool changeVar = false) {
-	std::vector<int> newOrder;
+		   Math::Matrix<T, n, 1> &x, bool swapVar = false) {
+	std::array<int, n> newOrder;
 	for(int i = 0; i < n; ++i) {
-		newOrder.push_back(i);
+		newOrder[i] = i;
 	}
 	
 	/* Direct traverse */
 	for(int k = 0; k < n; ++k) {
 		T temp = mat(k, k);
-		for(int j = k; j < n + 1; ++j) {
-			if(std::abs(temp) < eps) {
-				std::cout << "SMALL " << temp << std::endl;
-				if(changeVar) {
-					std::cout << "Changing variables\n";
-					for(int i = k + 1; i < n; ++i) {
-						std::cout << mat(k, i) << " " << temp << "\n";
-						if(std::abs(mat(k, i)) > std::abs(temp)) {
-							std::cout << "Changed " << i << " " << k << "\n";
-							for(int z = 0; z < n; ++z) {
-								std::swap(mat(z,k), mat(z, i));
-							}
-						}
-						temp = mat(k, k);
-						newOrder[k] = i;
-						newOrder[i] = k;
-						std::cout << "NEW\n" << mat;
-						break;
-					}
+		if(std::abs(temp) < eps) {
+			std::cout << boost::format("Small leading element %1$e\n") % temp;
+		}
+		if(swapVar) {
+			T curMax = temp;
+			int maxIdx = k;
+			for(int i = k + 1; i < n; ++i) {
+				if(std::abs(mat(k, i)) > std::abs(curMax)) {
+					curMax = mat(k, i);
+					maxIdx = i;
 				}
 			}
+			if(maxIdx != k) {
+				for(int z = 0; z < n; ++z) {
+					std::swap(mat(z,k), mat(z, maxIdx));
+				}
+				temp = mat(k, k);
+				std::swap(newOrder[k], newOrder[maxIdx]);
+				std::cout << "Swapped columns\n";
+			}
+		}			
+		
+		for(int j = k; j < n + 1; ++j) {
 			mat(k, j) /= temp;
 		}
+
 		for(int i = k + 1; i < n; ++i) {
 			T temp = mat(i, k);
 			for(int j = k; j < n + 1; ++j) {
@@ -62,15 +67,20 @@ void gauss(Math::Matrix<T, n, n+1> &mat,
 			}
 		}
 	}
-	
+
 	/* Back traverse */
+	std::array<T, n> X;
 	for(int i = n - 1; i >= 0; --i) {
-		/** TODO: make Vector with operator[] */
 		T sum = 0;
 		for(int j = i + 1; j < n; ++j) {
-			sum += mat(i, j) * x(j, 0);
+			sum += mat(i, j) * X[j];
 		}
-		x(newOrder[i], 0) = mat(i, n) - sum; /* In case variables don't change, newOrder[i] == i. */
+		X[i] = mat(i, n) - sum;
+	}
+	
+	/* Restore original order */
+	for(int i = 0; i < n; ++i) {
+		x(newOrder[i], 0) = X[i];
 	}
 }
 
