@@ -15,17 +15,19 @@
  */
 const double eps = 1e-5; 
 
+
 /**
- * Gauss elimination
- * Does not save the matrix but modifies it in place
- * @param[in,out] mat The extended matrix of the system
- * @param[out] x Output vector containing a solution
+ * Gauss elimination.
+ * Does not save the matrix but modifies it in place.
+ * It can be used to solve `s` linear systems A*x_i = b_i (i = 0..s-1) simultaneously.
+ * @param[in,out] mat The extended matrix of the systems. First n rows are A, last s rows are b_i.
+ * @param[out] x Output matrix containing solutions x_i.
  * @param swapVar if true, algorithm will swap variables (that is, swap columns of the matrix)
- *                when the leading element is too small
+ *                when the leading element is too small.
  */
-template<typename T, int n>
-void gauss(Math::Matrix<T, n, n+1> &mat,
-		   Math::Matrix<T, n, 1> &x, bool swapVar = false) {
+template<typename T, int n, int s>
+void gauss(Math::Matrix<T, n, n+s> &mat,
+		   Math::Matrix<T, n, s> &x, bool swapVar = false) {
 	std::array<int, n> newOrder;
 	for(int i = 0; i < n; ++i) {
 		newOrder[i] = i;
@@ -56,31 +58,35 @@ void gauss(Math::Matrix<T, n, n+1> &mat,
 			}
 		}			
 		
-		for(int j = k; j < n + 1; ++j) {
+		for(int j = k; j < n + s; ++j) {
 			mat(k, j) /= temp;
 		}
 
 		for(int i = k + 1; i < n; ++i) {
 			T temp = mat(i, k);
-			for(int j = k; j < n + 1; ++j) {
+			for(int j = k; j < n + s; ++j) {
 				mat(i, j) -= mat(k, j) * temp;
 			}
 		}
 	}
 
 	/* Back traverse */
-	std::array<T, n> X;
-	for(int i = n - 1; i >= 0; --i) {
-		T sum = 0;
-		for(int j = i + 1; j < n; ++j) {
-			sum += mat(i, j) * X[j];
+	Math::Matrix<T, n, s> X;
+	for(int k = 0; k < s; ++k) {
+		for(int i = n - 1; i >= 0; --i) {
+			T sum = 0;
+			for(int j = i + 1; j < n; ++j) {
+				sum += mat(i, j) * X(j,k);
+			}
+			X(i,k) = mat(i, n+k) - sum;
 		}
-		X[i] = mat(i, n) - sum;
 	}
 	
 	/* Restore original order */
-	for(int i = 0; i < n; ++i) {
-		x(newOrder[i], 0) = X[i];
+	for(int k = 0; k < s; ++k) {
+		for(int i = 0; i < n; ++i) {
+			x(newOrder[i], k) = X(i, k);
+		}
 	}
 }
 
@@ -109,28 +115,27 @@ void luDecomposition(const Math::Matrix<T, n, n> &mat,
 	}
 }
 
+/**
+ * @returns Identity matrix.
+ */
+template<typename T, int n>
+Math::Matrix<T, n, n> identity() {
+	Math::Matrix<T, n, n> E;
+	for(int i = 0; i < n; ++i) {
+		E(i, i) = 1;
+	}
+	return E;
+}
+
+	
 /** Inverted matrix
  *
  */
 template<typename T, int n>
-void invert(Math::Matrix<T, n, n> &mat,
+void invert(const Math::Matrix<T, n, n> &mat,
 			Math::Matrix<T, n, n> &inv) {
-	std::vector<Math::Matrix<T, n, 1> > columns;
-	Math::Matrix<T, n, 1> col;
-
-	for(int i = 0; i < n; ++i) {
-		Math::Matrix<T, n, 1> identityCol;
-		identityCol(i, 0) = 1;
-		Math::Matrix<T, n, n+1> extended(Math::concatenateH(mat, identityCol));
-		gauss(extended, col);  //LU 
-		columns.push_back(col);
-	}
-
-	for(int i = 0; i < n; ++i) {
-		for(int j = 0; j < n; ++j) {
-			inv(i, j) = columns[j](i, 0);
-		}
-	}		
+	Math::Matrix<T, n, 2*n> cat = concatenateH(mat, identity<T, n>());
+	gauss(cat, inv);
 }
 
 #endif // LINEAR_SYSTEM_HPP
