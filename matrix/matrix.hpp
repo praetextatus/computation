@@ -36,6 +36,7 @@ namespace Math
 
 		/* arithmetics */
 		Matrix<T, n, m>& operator+=(const Matrix<T, n, m>& rhs);
+		Matrix<T, n, m>& operator-=(const Matrix<T, n, m>& rhs);
 		Matrix<T, n, m>& operator*=(T scalar);
 		bool operator==(const Matrix<T, n, m> &rhs);
 	};
@@ -95,6 +96,11 @@ namespace Math
 		}
 		return *this;
 	}
+
+	template<typename T, int n, int m>
+	Matrix<T, n, m>& Matrix<T, n, m>::operator-=(const Matrix<T, n, m>& rhs) {
+		return this->operator+=(-rhs);
+	}
 	
 	template<typename T, int n, int m>
 	Matrix<T, n, m>& Matrix<T, n, m>::operator*=(T scalar) {
@@ -130,6 +136,12 @@ namespace Math
 	template<typename T, int n, int m>
 	Matrix<T, n, m> operator+(Matrix<T, n, m> lhs, const Matrix<T, n, m> &rhs) {
 		lhs += rhs;
+		return lhs;
+	}
+
+	template<typename T, int n, int m>
+	Matrix<T, n, m> operator-(Matrix<T, n, m> lhs, const Matrix<T, n, m> &rhs) {
+		lhs -= rhs;
 		return lhs;
 	}
 
