@@ -1,8 +1,9 @@
 #include <iostream>
 #include "seidel.hpp"
 
-typedef Math::Matrix<double, 3, 3> Matrix3;
-typedef Math::Matrix<double, 3, 1> Vector3;
+constexpr int n = 3;
+typedef Math::Matrix<double, n, n> Matrix3;
+typedef Math::Matrix<double, n, 1> Vector3;
 
 int main() {
 	Matrix3 mat 	{4, -1, -1,

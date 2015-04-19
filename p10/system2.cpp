@@ -20,13 +20,17 @@ Vector2d solve2(const Matrix2d &coeffs, const Vector2d &b){
 }
 
 double norm2(const Matrix2d &mat) {
-	double sum = 0;
+	double norm = 0;
 	for(int i = 0; i < 2; ++i) {
+		double sum = 0;
 		for(int j = 0; j < 2; ++j) {
 			sum += std::abs(mat(i,j));
 		}
+		if(sum > norm) {
+			norm = sum;
+		}
 	}
-	return sum;
+	return norm;
 }
 
 double cond(const Matrix2d &mat) {
