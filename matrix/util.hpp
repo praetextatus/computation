@@ -70,8 +70,8 @@ namespace Math {
 	 * A better pretty print. Writes directly to std::cout. New line is inserted after.
 	 */
 	template<typename T, int n, int m>
-    void prettyPrint(const Matrix<T, n, m> &mat, std::string label = "") {
-		std::cout << std::setprecision(3);
+    void prettyPrint(const Matrix<T, n, m> &mat, std::string label = "", int precision = 3) {
+		std::cout << std::setprecision(precision);
 		int labelLen = label.length();
 		for(int i = 0; i < n; ++i) {
 			if(labelLen) {
