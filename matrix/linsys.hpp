@@ -17,6 +17,7 @@ namespace Math {
 	 * @param swapVar if true, algorithm will swap variables (that is, swap columns of the matrix)
 	 *                when the leading element is too small.
 	 * @param eps precision
+	 * @tparam T must be statically cast to double
 	 */
 	template<typename T, int n, int s>
 	void gauss(Math::Matrix<T, n, n+s> &mat,
@@ -29,7 +30,7 @@ namespace Math {
 		/* Direct traverse */
 		for(int k = 0; k < n; ++k) {
 			T temp = mat(k, k);
-			if(std::abs(temp) < eps) {
+			if(std::abs(static_cast<double>(temp)) < eps) {
 				std::cout << boost::format("Small leading element %1$e\n") % temp;
 			}
 			if(swapVar) {
@@ -112,12 +113,12 @@ namespace Math {
 	 * @returns norm
 	 */
 	template<typename T, int n>
-	T euclidNorm(const Math::Matrix<T, n, 1> &vec) {
+	double euclidNorm(const Math::Matrix<T, n, 1> &vec) {
 		T sum = 0;
 		for(int i = 0; i < n; ++i) {
 			sum += vec(i, 0) * vec(i, 0);
 		}
-		return std::sqrt(sum);
+		return std::sqrt(static_cast<double>(sum));
 	}
 
 	/** Solve the system x=Hx+g iteratively.
