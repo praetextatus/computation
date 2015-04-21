@@ -43,4 +43,49 @@ namespace Math {
 		}
 		return cat;
 	}
+
+	/**
+	 * Pretty print
+	 * Prints matrix in a pretty way. New line is inserted after.
+	 */
+	template<typename T, int n, int m>
+	std::ostream& operator<<(std::ostream &os, const Matrix<T, n, m> &mat) {
+		os << std::setprecision(3);
+		for(int i = 0; i < n; ++i) {
+			os << "| ";
+			for(int j = 0; j < m; ++j) {
+				if(std::abs(mat(i, j)) < 0.1 && std::abs(mat(i, j)) > 1e6) {
+					os << std::setiosflags(std::ios::scientific);
+				}
+				os << std::setw(10) 
+				   << mat(i, j) << " ";
+			}
+			os << "|\n";
+		}
+		return os;
+	}
+
+	/**
+	 * Pretty print
+	 * A better pretty print. Writes directly to std::cout. New line is inserted after.
+	 */
+	template<typename T, int n, int m>
+    void prettyPrint(const Matrix<T, n, m> &mat, std::string label = "") {
+		std::cout << std::setprecision(3);
+		int labelLen = label.length();
+		for(int i = 0; i < n; ++i) {
+			if(labelLen) {
+				std::cout << ((i == (n-1)/2)
+							  ? (label + " = ")
+							  : std::string(labelLen + 3, ' '));
+			}
+			std::cout << "| ";
+			for(int j = 0; j < m; ++j) {
+				std::cout << std::setw(10);
+				std::cout << mat(i, j) << " ";
+			}
+			std::cout << "|\n";
+		}
+		std::cout << "\n";
+	}
 };

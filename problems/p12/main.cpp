@@ -30,16 +30,18 @@ int main() {
 	rewriteSystem(mat, vec, H, g);
 	int iter = iterativeSolve(H, g, {0, 0, 0}, x);
 	Math::prettyPrint(x, "x");
-	std::cout << "iterations = " << iter << "\n";
 	R = vec - Math::dot(mat, x);
 	Math::prettyPrint(R, "R");
+	std::cout << "iterations = " << iter << "\n";
+
 
 	x = {0, 0, 0};
 	std::cout << "\nSolving the same system with Seidel\n";
 	iter = seidel(mat, vec, x, 1e-5);
 	Math::prettyPrint(x, "x");
-	std::cout << "iterations = " << iter << "\n";
 	R = vec -Math::dot(mat, x);
 	Math::prettyPrint(R, "R");
+	std::cout << "iterations = " << iter << "\n";
+
 }
 	

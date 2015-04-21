@@ -178,8 +178,6 @@ namespace Math {
 
 		rewriteSystem(mat, vec, Hseid, gseid);
 
-		std::cout << Hseid << "\n" << gseid;
-	
 		vector x;
 		vector old_x;
 		for(int iter = 0; iter < maxiter; ++iter) {
