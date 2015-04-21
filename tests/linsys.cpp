@@ -1,5 +1,6 @@
 #include <boost/test/unit_test.hpp>
-#include "../linear_system.hpp"
+#include "../matrix/linsys.hpp"
+#include "../matrix/util.hpp"
 
 BOOST_AUTO_TEST_SUITE( test_suite_linsys );
 
@@ -15,7 +16,7 @@ BOOST_AUTO_TEST_CASE( test_gauss ) {
 	std::cout << "SOLVING\n";
 	std::cout << mat;
 	std::cout << "EXPECTED\n" << expected_x;
-	gauss(mat, x);
+	Math::gauss(mat, x);
 	std::cout << "GOT\n" << x;
 	std::cout << "GOT\n" << mat;
 	BOOST_CHECK(x == expected_x);
@@ -53,13 +54,12 @@ BOOST_AUTO_TEST_CASE( test_invert ) {
 		mat {2, -14, 8,
 			3, -22, 7,
 			0, 2, 5};
-	Math::Matrix<double, 3, 3> inv;
 	Math::Matrix<double, 3, 3> 
 		inv_exp{-12.4, 8.6, 7.8,
 			-1.5, 1, 1,
 			0.6, -0.4, -0.2};
 			
-	invert(mat, inv);
+	Math::Matrix<double, 3, 3> inv = Math::invert(mat);
 	BOOST_CHECK(inv == inv_exp);
 }
 	

@@ -1,11 +1,8 @@
 #pragma once
 
-#ifndef SYSTEM2_HPP
-#define SYSTEM2_HPP
-
 #include <cmath>
 #include <stdexcept>
-#include "../matrix/matrix.hpp"
+#include "../../matrix/matrix.hpp"
 
 typedef Math::Matrix<double, 2, 2> Matrix2d;
 typedef Math::Matrix<double, 2, 1> Vector2d;
@@ -40,4 +37,3 @@ double cond(const Matrix2d &mat);
 	
 	
 	
-#endif // SYSTEM2_HPP	

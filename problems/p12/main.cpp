@@ -1,5 +1,6 @@
 #include <iostream>
-#include "seidel.hpp"
+#include "../../matrix/linsys.hpp"
+#include "../../matrix/util.hpp"
 
 constexpr int n = 3;
 typedef Math::Matrix<double, n, n> Matrix3;

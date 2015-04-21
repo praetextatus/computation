@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef MATRIX_HPP
-#define MATRIX_HPP
-
 #include <initializer_list>
 #include <array>
 #include <assert.h>
@@ -161,23 +158,6 @@ namespace Math
 	}
 
 	/**
-	 * Concatenate two matrices horizontally.
-	 * @param mat1 Left-hand nxr matrix.
-	 * @param mat2 Right-hand nxs matrix.
-	 * @returns A nx(r+s) matrix of which first r columns are from mat1 and last s columns are from mat2.
-	 */
-	template<typename T, int n, int r, int s>
-	Matrix<T, n, r+s> concatenateH(const Matrix<T, n, r> &mat1, const Matrix<T, n, s> &mat2) {
-		Matrix<T, n, r+s> cat;
-		for(int i = 0; i < n; ++i) {
-			for(int j = 0; j < r + s; ++j) {
-				cat(i, j) = (j < r) ? mat1(i, j) : mat2(i, j-r);
-			}
-		}
-		return cat;
-	}
-				
-	/**
 	 * Dot product.
 	 * This is a naive algorithm. It will be replaced by some other algorithm in the future.
 	 */
@@ -241,4 +221,3 @@ namespace Math
 	}
 };
 
-#endif // MATRIX_HPP

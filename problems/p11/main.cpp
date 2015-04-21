@@ -1,10 +1,11 @@
-#include <iostream>
-#include "linear_system.hpp"
+#include "../../matrix/linsys.hpp"
+#include "../../matrix/util.hpp"
 
 typedef Math::Matrix<double, 3, 3> Matrix3d;
 typedef Math::Matrix<double, 3, 1> Vector3d;
 
 int main() {
+//	using namespace Math;
 	Math::Matrix<double, 4, 4> mat 	{2, -14, 8, 1,
 			3, -22, 7, 2,
 			0, 2, 5, -1,
@@ -12,14 +13,13 @@ int main() {
 	
 	/* Invert matrix */
 	std::cout << "A\n" << mat;
-	Math::Matrix<double, 4, 4> inv;
-	invert(mat, inv);
+	Math::Matrix<double, 4, 4> inv = invert(mat);
 	std::cout << "A^(-1)\n" << inv;
 	
 	Math::Matrix<double, 4, 1> vec{2, 0, 5, 0};
 	Math::Matrix<double, 4, 1> x;
 	std::cout << "\nSolving system Ax=b where b =\n" << vec;
-	Math::Matrix<double, 4, 5> ext = Math::concatenateH(mat, vec);
+	Math::Matrix<double, 4, 5> ext = concatenateH(mat, vec);
 	gauss(ext, x);
 	std::cout << "x = \n" << x;
 	Math::Matrix<double, 4, 1> R = vec + (-Math::dot(mat, x));
