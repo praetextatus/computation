@@ -129,7 +129,7 @@ namespace Math {
 					   const Math::Matrix<T, n, 1> &g,
 					   const Math::Matrix<T, n, 1> &guess,
 					   Math::Matrix<T, n, 1> &sol,
-					   double precision,
+					   double precision = 1e-5,
 					   int maxiter = 100) {
 		Math::Matrix<T, n, 1> x = guess;
 	
